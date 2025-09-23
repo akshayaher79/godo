@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "godo",
+    "description": "A to-do app to help you get your tasks done",
+    "slug": "godo",
+    "version": "0.1.0-idea1",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "godo",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.akshayaher79.godo"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c5845bba-625a-46e3-bd69-1bfb7f6d2b46"
+      }
+    },
+    "owner": "akshayaher79"
+  }
+}
