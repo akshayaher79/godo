@@ -1,14 +1,15 @@
 import { type SQLiteDatabase } from 'expo-sqlite';
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 1;
+  const DATABASE_VERSION = 2;
   let { user_version: currentDbVersion } = await db.getFirstAsync(
     'PRAGMA user_version'
   );
+  console.log("DB version: " + currentDbVersion);
   if (currentDbVersion >= DATABASE_VERSION) {
     return;
   }
-  if (currentDbVersion === 0) {
+  if (currentDbVersion < DATABASE_VERSION) {
     await db.execAsync(
       `
       PRAGMA journal_mode = 'wal';
@@ -24,6 +25,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       );
       `
     );
+    console.log("Created tasks table");
 
     await db.execAsync(
       `
@@ -38,8 +40,9 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         (3, 'Catch up with friends.', NULL, false),
         (4, 'Read book.', NULL, false);
       `
-    )
-    currentDbVersion = 1;
+    );
+    console.log("Populated example tasks");
+    currentDbVersion = 2;
   }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

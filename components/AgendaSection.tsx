@@ -19,11 +19,13 @@ export default function AgendaSection({ sectionIndex }: { sectionIndex: number }
 
   const db = useSQLiteContext();
   useEffect(() => {
+    console.log(db);
     (async function() {
       const tasks = await db.getAllAsync<Task>(
         `SELECT id, title, description, done FROM tasks
-          WHERE date(agenda_date) = date('now') AND time_block=${sectionIndex};`);
+          WHERE date(agenda_date, 'unixepoch') = date() AND time_block=${sectionIndex};`);
       setTasks(tasks);
+      console.log(tasks);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
