@@ -5,8 +5,6 @@ import { SQLiteProvider } from 'expo-sqlite';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-import 'react-native-reanimated';
-
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { migrateDbIfNeeded } from '@/util/sqlite_helpers';
 
