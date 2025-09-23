@@ -17,7 +17,7 @@ export default function Agenda() {
           <InputModalProvider>
             <List.AccordionGroup>
               {[0, 1, 2, 3, 4].map(sectionIndex => (
-                <AgendaSection sectionIndex={sectionIndex} />
+                <AgendaSection key={sectionIndex} sectionIndex={sectionIndex} />
               ))}
             </List.AccordionGroup>
           </InputModalProvider>
