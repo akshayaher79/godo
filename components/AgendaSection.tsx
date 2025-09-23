@@ -32,42 +32,39 @@ export default function AgendaSection({ sectionIndex }: { sectionIndex: number }
 
   const switchTaskStatusSQL = db.prepareSync(
     "UPDATE tasks SET done = CASE done WHEN 1 THEN 0 ELSE 1 END WHERE id=$id;");
-  function switchTaskStatus(id: number) {
-    switchTaskStatusSQL.executeAsync({$id: id}).then(() => {
-      setTasks(staleTasks =>
-        staleTasks.map(task => (
-          task.id === id ? { ...task, done: !task.done } : task
-        ))
-      );
-    });
+  async function switchTaskStatus(id: number) {
+    await switchTaskStatusSQL.executeAsync({$id: id});
+    setTasks(staleTasks =>
+      staleTasks.map(task => (
+        task.id === id ? { ...task, done: !task.done } : task
+      ))
+    );
   }
 
   const updateTaskTextSQL = db.prepareSync(
     "UPDATE tasks SET title = $title, description = $description WHERE id=$id;");
-  function updateTaskText(id: number, { title, description }: { title: string; description: string }) {
-    updateTaskTextSQL.executeAsync({ $id: id, $title: title, $description: description }).then(() => {
-      setTasks(staleTasks =>
-        staleTasks.map(task => (
-          task.id === id ? { ...task, title, description } : task
-        ))
-      );
-    });
+  async function updateTaskText(id: number, { title, description }: { title: string; description: string }) {
+    await updateTaskTextSQL.executeAsync({ $id: id, $title: title, $description: description });
+    setTasks(staleTasks =>
+      staleTasks.map(task => (
+        task.id === id ? { ...task, title, description } : task
+      ))
+    );
   }
 
   const deleteTaskSQL = db.prepareSync(
     "DELETE FROM tasks WHERE $id = id;");
-  function deleteTask(id: number) {
-    deleteTaskSQL.executeAsync({ $id: id }).then(() => {
-      setTasks(staleTasks => staleTasks.filter(task => task.id !== id));
-    });
+  async function deleteTask(id: number) {
+    await deleteTaskSQL.executeAsync({ $id: id });
+    setTasks(staleTasks => staleTasks.filter(task => task.id !== id));
   }
 
   const addTaskSQL = db.prepareSync(
     "INSERT INTO tasks (time_block, title, description) VALUES ($time_block, $title, $description);");
-  function addTask({ title, description }: { title: string; description: string }) {
-    addTaskSQL.executeAsync({ $time_block: sectionIndex, $title: title, $description: description}).then(({ lastInsertRowId }) => (
-      db.getAllAsync(`SELECT id, title, description, done FROM tasks WHERE id = ${lastInsertRowId}`)
-    )).then(rows => setTasks(Array.prototype.concat(tasks, rows)));
+  async function addTask({ title, description }: { title: string; description: string }) {
+    const { lastInsertRowId } = await addTaskSQL.executeAsync({ $time_block: sectionIndex, $title: title, $description: description});
+    const rows = await db.getAllAsync(`SELECT id, title, description, done FROM tasks WHERE id = ${lastInsertRowId}`);
+    setTasks(Array.prototype.concat(tasks, rows));
   }
 
   const tasks_summary = tasks.map(task => task.title).join(' • ');
