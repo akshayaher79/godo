@@ -17,7 +17,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <SQLiteProvider databaseName="godo.db" onInit={migrateDbIfNeeded} useSuspense>
+    <SQLiteProvider databaseName="godo.db" onInit={migrateDbIfNeeded}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
